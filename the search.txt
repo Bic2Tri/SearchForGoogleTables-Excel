@@ -1,0 +1,54 @@
+function removeEndings(fullName) {
+  const endings = [
+    // Отчества
+    'ович', 'евич', 'ич', 'овна', 'евна', 'ична', 'инична',
+    'ов', 'ев', 'ин', 'ова', 'ева', 'ина',
+
+    // Имена
+    'а', 'я', 'й',
+
+    // Фамилии
+    'ов', 'ев', 'ин', 'ский', 'ой', 'их', 'ых',
+    'ых', 'ский', 'ий', 'ов', 'ин', 'ей', 'ов', 'ий',
+    'ова', 'ева', 'ина', 'ская', 'ая', 'их', 'ых',
+    'ская', 'ия', 'ова', 'ина', 'ей', 'ых', 'ова', 'ия'
+  ];
+
+  // Разделение полного имени на части
+  const parts = fullName.split(' ');
+
+  // Обработка каждой части
+  const resultParts = parts.map(part => {
+    for (const ending of endings) {
+      if (part.endsWith(ending)) {
+        return part.slice(0, -ending.length);
+      }
+    }
+    return part;
+  });
+
+  // Возвращение обработанного полного имени
+  return resultParts.join(' ');
+}
+
+// Функция для вычисления значения слова
+function calculateWordValue(word) {
+  let sum = 0;
+  const alphabet = 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя0123456789';
+  for (let i = 0; i < word.length; i++) {
+    const letterValue = alphabet.indexOf(word[i].toLowerCase()) + 1;
+    sum += Math.pow(letterValue, word.length - i); 
+  }
+  return sum;
+}
+
+// Функция для вычисления суммы значений слов
+function calculateFullNameValue(fullName) {
+  const words = removeEndings(fullName).split(' ');
+  let totalSum = 0;
+  for (const word of words) {
+    totalSum += calculateWordValue(word);
+  }
+  
+  return totalSum;
+}
